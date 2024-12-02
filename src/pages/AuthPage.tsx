@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Navbar } from '../components/Navbar';
@@ -6,6 +6,8 @@ import { Footer } from '../components/Footer';
 import { Eye, EyeOff } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../lib/firebase';
 
 export function AuthPage() {
   const [mode, setMode] = useState<'login' | 'signup' | 'reset'>('login');
@@ -13,9 +15,26 @@ export function AuthPage() {
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [logo, setLogo] = useState({ url: '', darkUrl: '' });
   const { signup, login, resetPassword } = useAuth();
   const { theme } = useTheme();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchLogo = async () => {
+      try {
+        const docRef = doc(db, 'settings', 'general');
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists() && docSnap.data().logo) {
+          setLogo(docSnap.data().logo);
+        }
+      } catch (error) {
+        console.error('Error fetching logo:', error);
+      }
+    };
+
+    fetchLogo();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -67,17 +86,24 @@ export function AuthPage() {
             exit="exit"
             variants={formVariants}
           >
-            <div className="flex justify-center mb-8">
+            <div className="flex flex-col items-center mb-8">
               {theme === 'dark' ? (
-                <img src="/wino-logo.svg" alt="WINO" className="h-12 w-auto invert" />
+                logo.darkUrl ? (
+                  <img src={logo.darkUrl} alt="WINO" className="h-12 w-auto mb-6" />
+                ) : (
+                  <span className="text-4xl font-bold text-amber-400 mb-6">WINO</span>
+                )
               ) : (
-                <img src="/wino-logo.svg" alt="WINO" className="h-12 w-auto" />
+                logo.url ? (
+                  <img src={logo.url} alt="WINO" className="h-12 w-auto mb-6" />
+                ) : (
+                  <span className="text-4xl font-bold text-amber-800 mb-6">WINO</span>
+                )
               )}
+              <h2 className="text-2xl font-bold text-neutral-900 dark:text-white">
+                {mode === 'login' ? 'Welcome Back' : mode === 'signup' ? 'Create Account' : 'Reset Password'}
+              </h2>
             </div>
-
-            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-6 text-center">
-              {mode === 'login' ? 'Welcome Back' : mode === 'signup' ? 'Create Account' : 'Reset Password'}
-            </h2>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               {mode === 'signup' && (

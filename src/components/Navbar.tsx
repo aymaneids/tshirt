@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, ShoppingCart, User, LayoutDashboard, Heart, Sun, Moon } from 'lucide-react';
+import { Menu, ShoppingCart, User, LayoutDashboard, Heart, Sun, Moon, X } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
@@ -14,6 +14,7 @@ export function Navbar() {
   const { likes } = useLikes();
   const { theme, toggleTheme } = useTheme();
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [logo, setLogo] = useState({ url: '', darkUrl: '' });
   const navigate = useNavigate();
 
@@ -33,12 +34,26 @@ export function Navbar() {
     fetchLogo();
   }, []);
 
+  const handleLogout = () => {
+    logout();
+    setShowUserMenu(false);
+    setShowMobileMenu(false);
+  };
+
+  const mobileMenuLinks = [
+    { to: '/products', label: 'Products' },
+    { to: '/story', label: 'Our Story' },
+    { to: '/events', label: 'Events' },
+    { to: '/reviews', label: 'Reviews' },
+    { to: '/contact', label: 'Contact' }
+  ];
+
   return (
-    <nav className="fixed w-full bg-white/80 dark:bg-neutral-900/80 backdrop-blur-md z-50 border-b border-neutral-200 dark:border-neutral-800">
+    <nav className="fixed w-full bg-white dark:bg-neutral-900 z-50 border-b border-neutral-200 dark:border-neutral-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
-            <Link to="/" className="flex items-center gap-2">
+            <Link to="/" className="flex items-center gap-2" onClick={() => setShowMobileMenu(false)}>
               {theme === 'dark' && logo.darkUrl ? (
                 <img src={logo.darkUrl} alt="Logo" className="h-8 w-auto" />
               ) : logo.url ? (
@@ -50,11 +65,15 @@ export function Navbar() {
           </div>
           
           <div className="hidden md:flex items-center space-x-8">
-            <Link to="/products" className="text-neutral-600 dark:text-neutral-300 hover:text-amber-800 dark:hover:text-amber-400">Products</Link>
-            <Link to="/story" className="text-neutral-600 dark:text-neutral-300 hover:text-amber-800 dark:hover:text-amber-400">Our Story</Link>
-            <Link to="/events" className="text-neutral-600 dark:text-neutral-300 hover:text-amber-800 dark:hover:text-amber-400">Events</Link>
-            <Link to="/reviews" className="text-neutral-600 dark:text-neutral-300 hover:text-amber-800 dark:hover:text-amber-400">Reviews</Link>
-            <Link to="/contact" className="text-neutral-600 dark:text-neutral-300 hover:text-amber-800 dark:hover:text-amber-400">Contact</Link>
+            {mobileMenuLinks.map(link => (
+              <Link 
+                key={link.to}
+                to={link.to} 
+                className="text-neutral-600 dark:text-neutral-300 hover:text-amber-800 dark:hover:text-amber-400"
+              >
+                {link.label}
+              </Link>
+            ))}
           </div>
 
           <div className="flex items-center space-x-4">
@@ -102,10 +121,7 @@ export function Navbar() {
                         Profile
                       </Link>
                       <button
-                        onClick={() => {
-                          logout();
-                          setShowUserMenu(false);
-                        }}
+                        onClick={handleLogout}
                         className="block w-full text-left px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-amber-50 dark:hover:bg-amber-900/20"
                       >
                         Logout
@@ -136,12 +152,47 @@ export function Navbar() {
               )}
             </Link>
 
-            <button className="md:hidden p-2 hover:bg-amber-50 dark:hover:bg-amber-900/20 rounded-full">
+            <button 
+              onClick={() => setShowMobileMenu(true)}
+              className="md:hidden p-2 hover:bg-amber-50 dark:hover:bg-amber-900/20 rounded-full"
+            >
               <Menu className="w-5 h-5 text-amber-800 dark:text-amber-400" />
             </button>
           </div>
         </div>
       </div>
+
+      {/* Mobile Menu */}
+      {showMobileMenu && (
+        <div className="fixed inset-0 bg-black/50 z-50">
+          <div className="fixed inset-y-0 right-0 w-64 bg-white dark:bg-neutral-900 shadow-lg">
+            <div className="p-4">
+              <div className="flex justify-between items-center mb-8">
+                <h2 className="text-lg font-bold text-neutral-900 dark:text-white">Menu</h2>
+                <button
+                  onClick={() => setShowMobileMenu(false)}
+                  className="p-2 hover:bg-amber-50 dark:hover:bg-amber-900/20 rounded-full"
+                >
+                  <X className="w-5 h-5 text-amber-800 dark:text-amber-400" />
+                </button>
+              </div>
+              
+              <div className="space-y-4">
+                {mobileMenuLinks.map(link => (
+                  <Link
+                    key={link.to}
+                    to={link.to}
+                    className="block py-2 text-neutral-600 dark:text-neutral-300 hover:text-amber-800 dark:hover:text-amber-400"
+                    onClick={() => setShowMobileMenu(false)}
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </nav>
   );
 }

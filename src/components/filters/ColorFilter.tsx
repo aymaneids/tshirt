@@ -1,17 +1,7 @@
 import React from 'react';
 import * as RadioGroup from '@radix-ui/react-radio-group';
 import { Check } from 'lucide-react';
-
-interface ColorOption {
-  name: string;
-  hex: string;
-}
-
-interface ColorFilterProps {
-  colors: ColorOption[];
-  selectedColor: string | null;
-  onChange: (color: string) => void;
-}
+import type { ColorFilterProps } from './types';
 
 export function ColorFilter({ colors, selectedColor, onChange }: ColorFilterProps) {
   return (

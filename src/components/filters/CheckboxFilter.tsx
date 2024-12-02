@@ -1,12 +1,7 @@
 import React from 'react';
 import * as Checkbox from '@radix-ui/react-checkbox';
 import { Check } from 'lucide-react';
-
-interface CheckboxFilterProps {
-  label: string;
-  checked: boolean;
-  onChange: (checked: boolean) => void;
-}
+import type { CheckboxFilterProps } from './types';
 
 export function CheckboxFilter({ label, checked, onChange }: CheckboxFilterProps) {
   return (

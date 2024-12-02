@@ -11,8 +11,8 @@ export function ProductCard(product: ProductCardProps) {
   const { addItem } = useCart();
 
   const handleAddToCart = (e: React.MouseEvent) => {
-    e.preventDefault(); // Prevent navigation
-    e.stopPropagation(); // Prevent event bubbling
+    e.preventDefault();
+    e.stopPropagation();
     addItem(product);
   };
 
@@ -35,15 +35,15 @@ export function ProductCard(product: ProductCardProps) {
         </div>
       </div>
       <div className="mt-4">
-        <h3 className="text-lg font-medium text-neutral-900">{product.name}</h3>
-        <p className="mt-1 text-sm text-neutral-500">{product.description}</p>
+        <h3 className="text-lg font-medium text-neutral-900 dark:text-white line-clamp-1">{product.name}</h3>
+        <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400 line-clamp-2">{product.description}</p>
         <div className="mt-2 flex items-center justify-between">
-          <p className="text-lg font-medium text-amber-800">${product.price}</p>
+          <p className="text-lg font-medium text-amber-800 dark:text-amber-400">${product.price}</p>
           <button
             onClick={handleAddToCart}
-            className="p-2 hover:bg-amber-50 rounded-full transition-colors"
+            className="p-2 hover:bg-amber-50 dark:hover:bg-amber-900/20 rounded-full transition-colors"
           >
-            <ShoppingCart className="w-5 h-5 text-amber-800" />
+            <ShoppingCart className="w-5 h-5 text-amber-800 dark:text-amber-400" />
           </button>
         </div>
       </div>

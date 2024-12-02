@@ -4,40 +4,46 @@ import { Link } from 'react-router-dom';
 
 export function Hero() {
   return (
-    <div className="relative h-screen">
+    <div className="relative min-h-[100vh] md:h-screen">
       <div className="absolute inset-0">
         <img
-          src="https://images.unsplash.com/photo-1611520189922-f7b1ba7d801f?auto=format&fit=crop&q=80"
-          alt="Moroccan Energy Balls"
+          src="https://images.unsplash.com/photo-1590739293931-a28a7997e3c9?auto=format&fit=crop&q=80"
+          alt="Moroccan Fashion"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-amber-900/90 to-amber-800/40" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/80 to-black/40" />
       </div>
       
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
-        <div className="flex flex-col justify-center h-full pt-16">
-          <h1 className="text-4xl md:text-6xl font-bold text-white max-w-2xl">
-            Natural Energy,
-            <span className="block">Moroccan Flavors</span>
-          </h1>
-          <p className="mt-6 text-xl text-amber-50 max-w-xl">
-            Discover our handcrafted energy balls made with premium Moroccan ingredients.
-            Perfect for your active lifestyle.
-          </p>
-          <div className="mt-10 flex gap-4">
-            <Link
-              to="/products"
-              className="bg-amber-500 text-white px-8 py-3 rounded-full font-medium hover:bg-amber-600 transition-colors flex items-center gap-2"
-            >
-              Shop Now
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-            <Link
-              to="/story"
-              className="bg-white/10 text-white px-8 py-3 rounded-full font-medium hover:bg-white/20 transition-colors"
-            >
-              Learn More
-            </Link>
+      <div className="relative h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col justify-center h-full pt-20 md:pt-16">
+          <div className="max-w-xl">
+            <div className="inline-block">
+              <span className="text-lg md:text-xl text-amber-400 font-medium mb-4 block">
+                ⵡⵉⵏⵓ | WINO
+              </span>
+            </div>
+            <h1 className="text-4xl md:text-7xl font-bold text-white">
+              Modern Style,
+              <span className="block text-amber-400">Moroccan Soul</span>
+            </h1>
+            <p className="mt-6 text-lg md:text-xl text-gray-200">
+              Discover our unique collection of t-shirts and hoodies inspired by the rich heritage and artistry of Morocco.
+            </p>
+            <div className="mt-8 md:mt-10 flex flex-col sm:flex-row gap-4">
+              <Link
+                to="/products"
+                className="w-full sm:w-auto text-center bg-amber-400 text-gray-900 px-8 py-4 rounded-full font-medium hover:bg-amber-300 transition-colors flex items-center justify-center gap-2"
+              >
+                Shop Collection
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+              <Link
+                to="/about"
+                className="w-full sm:w-auto text-center bg-white/10 text-white px-8 py-4 rounded-full font-medium hover:bg-white/20 transition-colors"
+              >
+                Our Story
+              </Link>
+            </div>
           </div>
         </div>
       </div>

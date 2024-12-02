@@ -1,11 +1,7 @@
 import React from 'react';
 import { ChevronDown } from 'lucide-react';
 import * as Collapsible from '@radix-ui/react-collapsible';
-
-interface FilterSectionProps {
-  title: string;
-  children: React.ReactNode;
-}
+import type { FilterSectionProps } from './types';
 
 export function FilterSection({ title, children }: FilterSectionProps) {
   return (

@@ -1,17 +1,10 @@
 import React from 'react';
 import * as Slider from '@radix-ui/react-slider';
-
-interface PriceRangeFilterProps {
-  minPrice: number;
-  maxPrice: number;
-  priceRange: [number, number];
-  onChange: (range: [number, number]) => void;
-}
+import type { PriceRangeFilterProps } from './types';
 
 export function PriceRangeFilter({ minPrice, maxPrice, priceRange, onChange }: PriceRangeFilterProps) {
   return (
     <div className="space-y-4">
-      <h3 className="text-sm font-medium text-neutral-900 dark:text-white">Price Range</h3>
       <div className="px-2">
         <Slider.Root
           className="relative flex items-center select-none touch-none w-full h-5"

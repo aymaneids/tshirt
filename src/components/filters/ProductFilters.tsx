@@ -4,26 +4,9 @@ import { PriceRangeFilter } from './PriceRangeFilter';
 import { CheckboxFilter } from './CheckboxFilter';
 import { ColorFilter } from './ColorFilter';
 import { X } from 'lucide-react';
-import type { Product } from '../../context/ProductContext';
+import type { ProductFiltersProps } from './types';
 
-interface Filters {
-  priceRange: [number, number];
-  types: string[];
-  materials: string[];
-  fits: string[];
-  madeIn: string[];
-  colors: string[];
-  sizes: string[];
-}
-
-interface ProductFiltersProps {
-  products: Product[];
-  filters: Filters;
-  onChange: (filters: Filters) => void;
-  onReset: () => void;
-}
-
-export function ProductFilters({ products, filters, onChange, onReset }: ProductFiltersProps) {
+export function ProductFilters({ products, filters, onChange, onReset, onClose }: ProductFiltersProps) {
   const prices = products.map(p => parseFloat(p.price));
   const minPrice = Math.min(...prices);
   const maxPrice = Math.max(...prices);
@@ -32,7 +15,6 @@ export function ProductFilters({ products, filters, onChange, onReset }: Product
   const uniqueMaterials = Array.from(new Set(products.map(p => p.details.material)));
   const uniqueFits = Array.from(new Set(products.map(p => p.details.fit)));
   const uniqueMadeIn = Array.from(new Set(products.map(p => p.details.madeIn)));
-  const uniqueColors = Array.from(new Set(products.flatMap(p => p.details.colors.map(c => c.name))));
   const uniqueSizes = Array.from(new Set(products.flatMap(p => p.details.sizes)));
 
   const colorOptions = Array.from(new Set(products.flatMap(p => p.details.colors)))
@@ -43,7 +25,7 @@ export function ProductFilters({ products, filters, onChange, onReset }: Product
       return acc;
     }, [] as { name: string; hex: string }[]);
 
-  const updateFilters = (key: keyof Filters, value: any) => {
+  const updateFilters = (key: keyof typeof filters, value: any) => {
     onChange({ ...filters, [key]: value });
   };
 
@@ -56,15 +38,24 @@ export function ProductFilters({ products, filters, onChange, onReset }: Product
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-medium text-neutral-900 dark:text-white">Filters</h2>
-        {hasActiveFilters && (
-          <button
-            onClick={onReset}
-            className="text-sm text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 flex items-center gap-1"
-          >
-            <X className="w-4 h-4" />
-            Reset all
-          </button>
-        )}
+        <div className="flex items-center gap-2">
+          {hasActiveFilters && (
+            <button
+              onClick={onReset}
+              className="text-sm text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300"
+            >
+              Reset all
+            </button>
+          )}
+          {onClose && (
+            <button
+              onClick={onClose}
+              className="lg:hidden p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-full"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          )}
+        </div>
       </div>
 
       <FilterSection title="Price">

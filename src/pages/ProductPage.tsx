@@ -5,7 +5,7 @@ import { useProducts } from '../context/ProductContext';
 import { ProductCard } from '../components/ProductCard';
 import { ProductFilters } from '../components/filters/ProductFilters';
 import { motion, AnimatePresence } from 'framer-motion';
-import { SlidersHorizontal } from 'lucide-react';
+import { SlidersHorizontal, X } from 'lucide-react';
 
 export function ProductPage() {
   const { products } = useProducts();
@@ -100,24 +100,42 @@ export function ProductPage() {
           </div>
 
           <div className="flex gap-8">
+            {/* Desktop Filters */}
+            <div className="hidden lg:block w-64">
+              <ProductFilters
+                products={products}
+                filters={filters}
+                onChange={setFilters}
+                onReset={resetFilters}
+              />
+            </div>
+
+            {/* Mobile Filters */}
             <AnimatePresence>
-              {(showFilters || window.innerWidth >= 1024) && (
+              {showFilters && (
                 <motion.div
-                  initial={{ x: -300, opacity: 0 }}
-                  animate={{ x: 0, opacity: 1 }}
-                  exit={{ x: -300, opacity: 0 }}
-                  transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                  className={`
-                    ${showFilters ? 'fixed inset-y-0 left-0 z-40 w-80 bg-white dark:bg-neutral-800 shadow-lg p-6 overflow-y-auto' : ''}
-                    lg:relative lg:w-64 lg:p-0 lg:shadow-none lg:block
-                  `}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="fixed inset-0 bg-black/50 z-50 lg:hidden"
+                  onClick={() => setShowFilters(false)}
                 >
-                  <ProductFilters
-                    products={products}
-                    filters={filters}
-                    onChange={setFilters}
-                    onReset={resetFilters}
-                  />
+                  <motion.div
+                    initial={{ x: '100%' }}
+                    animate={{ x: 0 }}
+                    exit={{ x: '100%' }}
+                    transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                    className="absolute right-0 top-0 h-full w-80 bg-white dark:bg-neutral-900 p-6 overflow-y-auto"
+                    onClick={e => e.stopPropagation()}
+                  >
+                    <ProductFilters
+                      products={products}
+                      filters={filters}
+                      onChange={setFilters}
+                      onReset={resetFilters}
+                      onClose={() => setShowFilters(false)}
+                    />
+                  </motion.div>
                 </motion.div>
               )}
             </AnimatePresence>
